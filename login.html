@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -68,6 +67,10 @@ body {
 </div>
 
 <script>
+
+// Cloudflare Worker API
+const API_URL = 'https://amazon-stock.seakyant.workers.dev/';
+
 async function login(){
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
@@ -80,23 +83,32 @@ async function login(){
     }
 
     try{
-        const res = await fetch('api.php', {
+        const res = await fetch(API_URL, {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({action:'login', username, password})
+            body: JSON.stringify({
+                action: 'login',
+                username,
+                password
+            })
         });
+
         const data = await res.json();
+
         if(data.ok){
             localStorage.setItem('token', data.token);
             window.location.href = 'index.html';
         } else {
             errorMsg.innerText = data.error || '登录失败';
         }
+
     }catch(e){
         errorMsg.innerText = '网络错误: ' + e.message;
     }
 }
+
 </script>
 
 </body>
 </html>
+```
